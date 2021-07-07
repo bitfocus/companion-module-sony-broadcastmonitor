@@ -1,0 +1,16 @@
+{
+	"name": "sonyprofessional-monitor",
+	"version": "1.0.0",
+	"api_version": "1.0.0",
+	"keywords": [ "Video", "Monitor", "Broadcast", "Production" ],
+	"manufacturer": "Sony",
+	"product": "Professional Video Monitor",
+	"shortname": "SonyMonitor",
+	"description": "-",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "Peter Daniel",
+	"license": "MIT"
+}
