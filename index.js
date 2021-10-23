@@ -12,7 +12,7 @@ function instance(system) {
 	self.request_id = 0
 	self.stash = []
 	self.command = null
-	
+
 	// choices
 	self.monitors = [
 		{ id: 'all', label: 'All monitor types' },
@@ -22,13 +22,13 @@ function instance(system) {
 		{ id: 'PVM-A', label: 'PVM-A250, PVM-A170' },
 		{ id: 'LMD-A', label: 'LMD-A240, LMD-A220, LMD-A170' },
 	]
-	
+
 	self.onOffToggle = [
 		{ id: 'ON', label: 'On' },
 		{ id: 'OFF', label: 'Off' },
 		{ id: 'TOGGLE', label: 'Toggle' },
 	]
-	
+
 	self.all_buttons = [
 		{ id: 'MENU', label: 'Menu' },
 		{ id: 'MENUENT', label: 'Enter' },
@@ -47,7 +47,7 @@ function instance(system) {
 		{ id: '8', label: 'Numeric 8' },
 		{ id: '9', label: 'Numeric 9' },
 	]
-	
+
 	self.inputs_x = [
 		{ id: '1', label: 'SDI 1 4K' },
 		{ id: '2', label: 'SDI 1 2K' },
@@ -62,7 +62,7 @@ function instance(system) {
 		{ id: '3', label: 'HDMI' },
 		{ id: '4', label: 'Composite' },
 	]
-	
+
 	self.status_options = [
 		{ id: 'MODEL', label: 'Model Name' },
 		{ id: 'SERIAL', label: 'Serial Number' },
@@ -78,17 +78,17 @@ function instance(system) {
 	return self
 }
 
-instance.prototype.updateConfig = function(config) {
+instance.prototype.updateConfig = function (config) {
 	var self = this
 
 	self.config = config
 	self.init_tcp()
-	
+
 	console.log('Using monitor type ' + self.config.monitor_type)
 	self.actions()
-};
+}
 
-instance.prototype.init = function() {
+instance.prototype.init = function () {
 	var self = this
 
 	debug = self.debug
@@ -99,10 +99,9 @@ instance.prototype.init = function() {
 	self.update_variables()
 	self.init_presets()
 	self.actions()
+}
 
-};
-
-instance.prototype.init_tcp = function() {
+instance.prototype.init_tcp = function () {
 	var self = this
 	var receivebuffer = Buffer.from('')
 
@@ -122,7 +121,7 @@ instance.prototype.init_tcp = function() {
 
 		self.socket.on('error', function (err) {
 			console.log('Network error', err)
-			self.log('error','Network error: ' + err.message)
+			self.log('error', 'Network error: ' + err.message)
 		})
 
 		self.socket.on('connect', function () {
@@ -131,10 +130,10 @@ instance.prototype.init_tcp = function() {
 
 		// separate buffered stream into lines with responses
 		self.socket.on('data', function (chunk) {
-			self.log('debug','data received')
+			self.log('debug', 'data received')
 			console.log('Received: ' + chunk.length + ' bytes ', chunk.toString('hex').match(/../g).join(' '))
 			self.socket.emit('decode', chunk)
-		});
+		})
 
 		self.socket.on('decode', function (data) {
 			if (data.length > 0) {
@@ -189,10 +188,10 @@ instance.prototype.config_fields = function () {
 			choices: self.monitors,
 		},
 	]
-};
+}
 
 // When module gets deleted
-instance.prototype.destroy = function() {
+instance.prototype.destroy = function () {
 	var self = this
 
 	if (self.socket !== undefined) {
@@ -200,17 +199,15 @@ instance.prototype.destroy = function() {
 	}
 
 	debug('destroy', self.id)
-};
+}
 
 instance.prototype.update_variables = function (system) {
 	var self = this
+}
 
-};
-
-instance.prototype.feedback = function(feedback, bank) {
+instance.prototype.feedback = function (feedback, bank) {
 	var self = this
-
-};
+}
 
 instance.prototype.init_presets = function () {
 	var self = this
@@ -242,13 +239,13 @@ instance.prototype.init_presets = function () {
 	}
 
 	self.setPresetDefinitions(presets)
-};
+}
 
-instance.prototype.actions = function() {
+instance.prototype.actions = function () {
 	var self = this
 	var actions = []
 	var type = self.config.monitor_type
-	
+
 	console.log('Creating actions for ' + type)
 
 	if (type === 'all' || type === 'BVM-X') {
@@ -261,8 +258,8 @@ instance.prototype.actions = function() {
 					id: 'state',
 					default: '1',
 					choices: self.inputs_x,
-				}
-			]
+				},
+			],
 		}
 	}
 
@@ -276,8 +273,8 @@ instance.prototype.actions = function() {
 					id: 'state',
 					default: '1',
 					choices: self.inputs_x,
-				}
-			]
+				},
+			],
 		}
 	}
 
@@ -291,8 +288,8 @@ instance.prototype.actions = function() {
 					id: 'state',
 					default: '1',
 					choices: self.inputs_a,
-				}
-			]
+				},
+			],
 		}
 	}
 
@@ -306,8 +303,8 @@ instance.prototype.actions = function() {
 					id: 'state',
 					default: '1',
 					choices: self.inputs_a,
-				}
-			]
+				},
+			],
 		}
 	}
 
@@ -323,10 +320,10 @@ instance.prototype.actions = function() {
 					choices: [
 						{ id: '4BY3', label: '4:3' },
 						{ id: '16BY9', label: '16:9' },
-						{ id: 'TOGGLE', label: 'Toggle' }
-					]
-				}
-			]
+						{ id: 'TOGGLE', label: 'Toggle' },
+					],
+				},
+			],
 		}
 	}
 
@@ -339,8 +336,8 @@ instance.prototype.actions = function() {
 				id: 'state',
 				default: 'ON',
 				choices: self.onOffToggle,
-			}
-		]
+			},
+		],
 	}
 
 	actions['monochr'] = {
@@ -352,8 +349,8 @@ instance.prototype.actions = function() {
 				id: 'state',
 				default: 'ON',
 				choices: self.onOffToggle,
-			}
-		]
+			},
+		],
 	}
 
 	if (type === 'all' || type === 'BVM-E' || type === 'BVM-X' || type === 'PVM-X') {
@@ -366,8 +363,8 @@ instance.prototype.actions = function() {
 					id: 'state',
 					default: 'ON',
 					choices: self.onOffToggle,
-				}
-			]
+				},
+			],
 		}
 
 		actions['manchr'] = {
@@ -379,8 +376,8 @@ instance.prototype.actions = function() {
 					id: 'state',
 					default: 'ON',
 					choices: self.onOffToggle,
-				}
-			]
+				},
+			],
 		}
 
 		actions['mancont'] = {
@@ -392,8 +389,8 @@ instance.prototype.actions = function() {
 					id: 'state',
 					default: 'ON',
 					choices: self.onOffToggle,
-				}
-			]
+				},
+			],
 		}
 
 		actions['manbrt'] = {
@@ -405,8 +402,8 @@ instance.prototype.actions = function() {
 					id: 'state',
 					default: 'ON',
 					choices: self.onOffToggle,
-				}
-			]
+				},
+			],
 		}
 	}
 
@@ -419,12 +416,11 @@ instance.prototype.actions = function() {
 				id: 'state',
 				default: 'ON',
 				choices: self.onOffToggle,
-			}
-		]
+			},
+		],
 	}
 
 	if (type === 'all' || type === 'BVM-E') {
-
 		actions['scanmode'] = {
 			label: 'Scan Mode',
 			options: [
@@ -437,10 +433,10 @@ instance.prototype.actions = function() {
 						{ id: 'UNDER', label: 'Underscan' },
 						{ id: 'OVER', label: 'Overscan' },
 						{ id: 'OVERMAT', label: 'Over Mat' },
-						{ id: 'TOGGLE', label: 'Toggle' }
-					]
-				}
-			]
+						{ id: 'TOGGLE', label: 'Toggle' },
+					],
+				},
+			],
 		}
 
 		actions['hdelay'] = {
@@ -452,8 +448,8 @@ instance.prototype.actions = function() {
 					id: 'state',
 					default: 'ON',
 					choices: self.onOffToggle,
-				}
-			]
+				},
+			],
 		}
 
 		actions['vdelay'] = {
@@ -465,13 +461,12 @@ instance.prototype.actions = function() {
 					id: 'state',
 					default: 'ON',
 					choices: self.onOffToggle,
-				}
-			]
+				},
+			],
 		}
 	}
 
 	if (type === 'all' || type === 'BVM-E' || type === 'BVM-X' || type === 'PVM-X') {
-
 		actions['rcutoff'] = {
 			label: 'Red Cut Off',
 			options: [
@@ -481,8 +476,8 @@ instance.prototype.actions = function() {
 					id: 'state',
 					default: 'ON',
 					choices: self.onOffToggle,
-				}
-			]
+				},
+			],
 		}
 
 		actions['gcutoff'] = {
@@ -494,8 +489,8 @@ instance.prototype.actions = function() {
 					id: 'state',
 					default: 'ON',
 					choices: self.onOffToggle,
-				}
-			]
+				},
+			],
 		}
 
 		actions['bcutoff'] = {
@@ -507,8 +502,8 @@ instance.prototype.actions = function() {
 					id: 'state',
 					default: 'ON',
 					choices: self.onOffToggle,
-				}
-			]
+				},
+			],
 		}
 
 		actions['aperture'] = {
@@ -520,8 +515,8 @@ instance.prototype.actions = function() {
 					id: 'state',
 					default: 'ON',
 					choices: self.onOffToggle,
-				}
-			]
+				},
+			],
 		}
 	}
 
@@ -534,8 +529,8 @@ instance.prototype.actions = function() {
 				id: 'state',
 				default: 'ON',
 				choices: self.onOffToggle,
-			}
-		]
+			},
+		],
 	}
 
 	if (type === 'all' || type === 'BVM-E' || type === 'PVM-A' || type === 'LMD-A') {
@@ -548,8 +543,8 @@ instance.prototype.actions = function() {
 					id: 'state',
 					default: 'ON',
 					choices: self.onOffToggle,
-				}
-			]
+				},
+			],
 		}
 	}
 
@@ -564,10 +559,10 @@ instance.prototype.actions = function() {
 					default: 'SINGLE',
 					choices: [
 						{ id: 'SINGLE', label: 'Single' },
-						{ id: 'GROUP', label: 'Group' }
-					]
-				}
-			]
+						{ id: 'GROUP', label: 'Group' },
+					],
+				},
+			],
 		}
 	}
 
@@ -581,8 +576,8 @@ instance.prototype.actions = function() {
 					id: 'state',
 					default: 'ON',
 					choices: self.onOffToggle,
-				}
-			]
+				},
+			],
 		}
 	}
 
@@ -596,8 +591,8 @@ instance.prototype.actions = function() {
 					id: 'state',
 					default: 'ON',
 					choices: self.onOffToggle,
-				}
-			]
+				},
+			],
 		}
 	}
 
@@ -611,8 +606,8 @@ instance.prototype.actions = function() {
 					id: 'state',
 					default: 'ON',
 					choices: self.onOffToggle,
-				}
-			]
+				},
+			],
 		}
 
 		actions['wipe'] = {
@@ -624,8 +619,8 @@ instance.prototype.actions = function() {
 					id: 'state',
 					default: 'ON',
 					choices: self.onOffToggle,
-				}
-			]
+				},
+			],
 		}
 
 		actions['blend'] = {
@@ -637,8 +632,8 @@ instance.prototype.actions = function() {
 					id: 'state',
 					default: 'ON',
 					choices: self.onOffToggle,
-				}
-			]
+				},
+			],
 		}
 	}
 
@@ -652,8 +647,8 @@ instance.prototype.actions = function() {
 					id: 'state',
 					default: 'ON',
 					choices: self.onOffToggle,
-				}
-			]
+				},
+			],
 		}
 
 		actions['pixelzoom'] = {
@@ -665,8 +660,8 @@ instance.prototype.actions = function() {
 					id: 'state',
 					default: 'ON',
 					choices: self.onOffToggle,
-				}
-			]
+				},
+			],
 		}
 	}
 
@@ -679,8 +674,8 @@ instance.prototype.actions = function() {
 				id: 'state',
 				default: 'ON',
 				choices: self.onOffToggle,
-			}
-		]
+			},
+		],
 	}
 
 	if (type === 'all' || type === 'BVM-E' || type === 'BVM-X' || type === 'PVM-X') {
@@ -693,8 +688,8 @@ instance.prototype.actions = function() {
 					id: 'state',
 					default: 'ON',
 					choices: self.onOffToggle,
-				}
-			]
+				},
+			],
 		}
 
 		actions['markerarea1'] = {
@@ -706,8 +701,8 @@ instance.prototype.actions = function() {
 					id: 'state',
 					default: 'ON',
 					choices: self.onOffToggle,
-				}
-			]
+				},
+			],
 		}
 
 		actions['markerarea2'] = {
@@ -719,8 +714,8 @@ instance.prototype.actions = function() {
 					id: 'state',
 					default: 'ON',
 					choices: self.onOffToggle,
-				}
-			]
+				},
+			],
 		}
 	}
 
@@ -734,8 +729,8 @@ instance.prototype.actions = function() {
 					id: 'state',
 					default: 'ON',
 					choices: self.onOffToggle,
-				}
-			]
+				},
+			],
 		}
 	}
 
@@ -749,8 +744,8 @@ instance.prototype.actions = function() {
 					id: 'state',
 					default: 'ON',
 					choices: self.onOffToggle,
-				}
-			]
+				},
+			],
 		}
 	}
 
@@ -763,8 +758,8 @@ instance.prototype.actions = function() {
 				id: 'state',
 				default: 'ON',
 				choices: self.onOffToggle,
-			}
-		]
+			},
+		],
 	}
 
 	if (type === 'all' || type === 'BVM-E') {
@@ -777,8 +772,8 @@ instance.prototype.actions = function() {
 					id: 'state',
 					default: 'ON',
 					choices: self.onOffToggle,
-				}
-			]
+				},
+			],
 		}
 	}
 
@@ -792,8 +787,8 @@ instance.prototype.actions = function() {
 					id: 'state',
 					default: 'ON',
 					choices: self.onOffToggle,
-				}
-			]
+				},
+			],
 		}
 
 		actions['markerblkhalf'] = {
@@ -805,8 +800,8 @@ instance.prototype.actions = function() {
 					id: 'state',
 					default: 'ON',
 					choices: self.onOffToggle,
-				}
-			]
+				},
+			],
 		}
 
 		actions['markerblkblack'] = {
@@ -818,8 +813,8 @@ instance.prototype.actions = function() {
 					id: 'state',
 					default: 'ON',
 					choices: self.onOffToggle,
-				}
-			]
+				},
+			],
 		}
 
 		actions['markercenter'] = {
@@ -831,10 +826,10 @@ instance.prototype.actions = function() {
 					id: 'state',
 					default: 'ON',
 					choices: self.onOffToggle,
-				}
-			]
+				},
+			],
 		}
-	}	
+	}
 
 	if (type === 'all' || type === 'PVM-A' || type === 'LMD-A') {
 		actions['hflip'] = {
@@ -846,12 +841,12 @@ instance.prototype.actions = function() {
 					id: 'state',
 					default: 'ON',
 					choices: self.onOffToggle,
-				}
-			]
+				},
+			],
 		}
 	}
 
-	if (type === 'all' || type === 'BVM-E' || type === 'BVM-X'|| type === 'PVM-X'|| type === 'PVM-A') {
+	if (type === 'all' || type === 'BVM-E' || type === 'BVM-X' || type === 'PVM-X' || type === 'PVM-A') {
 		actions['flickerfree'] = {
 			label: 'Flicker Free',
 			options: [
@@ -861,8 +856,8 @@ instance.prototype.actions = function() {
 					id: 'state',
 					default: 'ON',
 					choices: self.onOffToggle,
-				}
-			]
+				},
+			],
 		}
 	}
 
@@ -875,8 +870,8 @@ instance.prototype.actions = function() {
 				id: 'state',
 				default: 'MENU',
 				choices: self.all_buttons,
-			}
-		]
+			},
+		],
 	}
 
 	actions['status_request'] = {
@@ -888,14 +883,14 @@ instance.prototype.actions = function() {
 				id: 'state',
 				default: 'MODEL',
 				choices: self.status_options,
-			}
-		]
+			},
+		],
 	}
 
-	self.system.emit('instance_actions', self.id, actions);
+	self.system.emit('instance_actions', self.id, actions)
 }
 
-instance.prototype.action = function(action) {
+instance.prototype.action = function (action) {
 	var self = this
 	var header = '030B'
 	var community = '534F4E59' // SONY
@@ -903,14 +898,19 @@ instance.prototype.action = function(action) {
 	var unit = self.padLeft(self.config.monitor_id, 2) // Monitor unit ID
 	var request = '00'
 	var item = 'B000'
-	
+
 	var set = 'STATset'
 	var get = 'STATget'
 	var button = 'INFObutton'
-	
+
 	var cmd = header + community + group + unit + request + item
 
-	if (action.action === 'input_bvm-x' || action.action === 'input_pvm-x' || action.action === 'input_pvm-a' || action.action === 'input_lmd-a') {
+	if (
+		action.action === 'input_bvm-x' ||
+		action.action === 'input_pvm-x' ||
+		action.action === 'input_pvm-a' ||
+		action.action === 'input_lmd-a'
+	) {
 		var actionStr = button + ' ' + action.options.state
 	} else if (action.action === 'button_press') {
 		var actionStr = button + ' ' + action.options.state
@@ -929,35 +929,33 @@ instance.prototype.action = function(action) {
 
 	if (cmd !== undefined) {
 		if (self.socket !== undefined && self.socket.connected) {
-			
 			self.socket.send(self.hexStringToBuffer(cmd))
 		} else {
 			debug('Socket not connected :(')
 		}
 	}
-};
-
-instance.prototype.padLeft = function(nr, n, str) {
-	return Array(n-String(nr).length+1).join(str||'0')+nr
 }
 
-instance.prototype.asciiToHex = function(str) {
+instance.prototype.padLeft = function (nr, n, str) {
+	return Array(n - String(nr).length + 1).join(str || '0') + nr
+}
+
+instance.prototype.asciiToHex = function (str) {
 	var arr1 = []
-	for (var n = 0, l = str.length; n < l; n ++)
-	{
+	for (var n = 0, l = str.length; n < l; n++) {
 		var hex = Number(str.charCodeAt(n)).toString(16)
 		arr1.push(hex)
 	}
 	return arr1.join('')
 }
 
-instance.prototype.hexStringToBuffer = function(str) {
+instance.prototype.hexStringToBuffer = function (str) {
 	return Buffer.from(str, 'hex')
 }
 
-instance.prototype.getLength = function(str) {
+instance.prototype.getLength = function (str) {
 	var self = this
-	
+
 	var length = (str.length / 2).toString(16)
 	return self.padLeft(length, 4)
 }
