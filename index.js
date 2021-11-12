@@ -921,17 +921,17 @@ instance.prototype.action = function (action) {
 	}
 
 	console.log(actionStr)
-	self.log('debug', actionStr)
+	// self.log('debug', actionStr)
 	actionStrHex = self.asciiToHex(actionStr)
 	cmd = cmd + self.getLength(actionStrHex) + actionStrHex
-	self.log('debug', cmd)
-	console.log(self.hexStringToBuffer(cmd))
+	// self.log('debug', cmd)
+	// console.log(self.hexStringToBuffer(cmd))
 
 	if (cmd !== undefined) {
 		if (self.socket !== undefined && self.socket.connected) {
 			self.socket.send(self.hexStringToBuffer(cmd))
 		} else {
-			debug('Socket not connected :(')
+			console.log('Socket not connected :(')
 		}
 	}
 }
