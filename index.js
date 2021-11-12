@@ -130,7 +130,7 @@ instance.prototype.init_tcp = function () {
 
 		// separate buffered stream into lines with responses
 		self.socket.on('data', function (chunk) {
-			self.log('debug', 'data received')
+			// self.log('debug', 'data received')
 			console.log('Received: ' + chunk.length + ' bytes ', chunk.toString('hex').match(/../g).join(' '))
 			self.socket.emit('decode', chunk)
 		})
