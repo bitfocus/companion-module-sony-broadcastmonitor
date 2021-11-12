@@ -8,7 +8,7 @@ The module implements SDCP control for the following Sony Professional monitors.
 - PVM-A250 / PVM-A170
 - LMD-A240 / LMD-A220 / LMD-A170
 
-## Configuation
+## Configuration
 Only 'TCP Single' connections are currently supported. To control a monitor it must have an IP address and a Monitor Unit ID set.
 
 The following settings are required
