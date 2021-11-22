@@ -84,15 +84,12 @@ instance.prototype.updateConfig = function (config) {
 	self.config = config
 	self.init_tcp()
 
-	console.log('Using monitor type ' + self.config.monitor_type)
+	self.debug('Using monitor type ' + self.config.monitor_type)
 	self.actions()
 }
 
 instance.prototype.init = function () {
 	var self = this
-
-	debug = self.debug
-	log = self.log
 
 	self.init_tcp()
 
@@ -120,22 +117,22 @@ instance.prototype.init_tcp = function () {
 		})
 
 		self.socket.on('error', function (err) {
-			console.log('Network error', err)
+			self.debug('Network error', err)
 			self.log('error', 'Network error: ' + err.message)
 		})
 
 		self.socket.on('connect', function () {
-			console.log('Connected')
+			self.debug('Connected')
 		})
 
 		self.socket.on('data', function (chunk) {
-			console.log('Received: ' + chunk.length + ' bytes ', chunk.toString('hex').match(/../g).join(' '))
+			self.debug('Received: ' + chunk.length + ' bytes ', chunk.toString('hex').match(/../g).join(' '))
 			self.socket.emit('decode', chunk)
 		})
 
 		self.socket.on('decode', function (data) {
 			if (data.length > 0) {
-				console.log('decoding ' + data.length + 'bytes')
+				self.debug('decoding ' + data.length + 'bytes')
 			}
 		})
 	}
@@ -196,7 +193,7 @@ instance.prototype.destroy = function () {
 		self.socket.destroy()
 	}
 
-	debug('destroy', self.id)
+	self.debug('destroy', self.id)
 }
 
 instance.prototype.update_variables = function (system) {
@@ -212,7 +209,7 @@ instance.prototype.init_presets = function () {
 	var presets = []
 	var i
 
-	console.log('Create presets')
+	self.debug('Create presets')
 
 	for (i = 0; i < self.all_buttons.length; ++i) {
 		presets.push({
@@ -244,7 +241,7 @@ instance.prototype.actions = function () {
 	var actions = []
 	var type = self.config.monitor_type
 
-	console.log('Creating actions for ' + type)
+	self.debug('Creating actions for ' + type)
 
 	if (type === 'all' || type === 'BVM-X') {
 		actions['input_bvm-x'] = {
@@ -918,18 +915,18 @@ instance.prototype.action = function (action) {
 		var actionStr = set + ' ' + action.action.toUpperCase() + ' ' + action.options.state
 	}
 
-	console.log(actionStr)
+	self.debug(actionStr)
 	// self.log('debug', actionStr)
 	actionStrHex = self.asciiToHex(actionStr)
 	cmd = cmd + self.getLength(actionStrHex) + actionStrHex
 	// self.log('debug', cmd)
-	// console.log(self.hexStringToBuffer(cmd))
+	// self.debug(self.hexStringToBuffer(cmd))
 
 	if (cmd !== undefined) {
 		if (self.socket !== undefined && self.socket.connected) {
 			self.socket.send(self.hexStringToBuffer(cmd))
 		} else {
-			console.log('Socket not connected :(')
+			self.debug('Socket not connected')
 		}
 	}
 }
