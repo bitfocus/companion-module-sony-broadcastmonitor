@@ -17,5 +17,13 @@
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"author": "Peter Daniel",
-	"license": "MIT"
+	"license": "MIT",
+	"homepage": "https://github.com/bitfocus/companion-module-sony-broadcastmonitor#readme",
+	"bugs": {
+		"url": "https://github.com/bitfocus/companion-module-sony-broadcastmonitor/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/bitfocus/companion-module-sony-broadcastmonitor.git"
+	}
 }
