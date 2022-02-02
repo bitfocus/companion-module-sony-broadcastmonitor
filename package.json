@@ -1,8 +1,13 @@
 {
 	"name": "sony-broadcastmonitor",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"api_version": "1.0.0",
-	"keywords": [ "Video", "Monitor", "Broadcast", "Production" ],
+	"keywords": [
+		"Video",
+		"Monitor",
+		"Broadcast",
+		"Production"
+	],
 	"manufacturer": "Sony",
 	"product": "Professional Video Monitor",
 	"shortname": "SonyMonitor",
