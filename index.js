@@ -882,7 +882,7 @@ instance.prototype.actions = function () {
 		],
 	}
 
-	self.system.emit('instance_actions', self.id, actions)
+	self.setActions(actions)
 }
 
 instance.prototype.action = function (action) {
